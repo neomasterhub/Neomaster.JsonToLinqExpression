@@ -20,4 +20,16 @@ public class ExpressionHelper
       ? right
       : binaryBind(left, right);
   }
+
+  public static IEnumerable<JsonElement> EnumerateExpressionRules(
+    JsonElement condition,
+    string rulesPropertyName)
+  {
+    var rules = condition.GetProperty(rulesPropertyName).EnumerateArray();
+
+    foreach (var r in rules)
+    {
+      yield return r;
+    }
+  }
 }
