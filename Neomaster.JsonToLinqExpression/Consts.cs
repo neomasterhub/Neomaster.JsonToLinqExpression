@@ -8,9 +8,7 @@ public static class Consts
 
   public static class ExpressionOperatorMappers
   {
-    public static readonly ExpressionOperatorMapper Default = new ExpressionOperatorMapper()
-      .Add("or", Expression.Or)
-      .Add("and", Expression.And)
+    public static readonly ExpressionOperatorMapper Default = new ExpressionOperatorMapper("or", "and")
       .Add("eq", Expression.Equal)
       .Add("neq", Expression.NotEqual)
       .Add("gt", Expression.GreaterThan)
