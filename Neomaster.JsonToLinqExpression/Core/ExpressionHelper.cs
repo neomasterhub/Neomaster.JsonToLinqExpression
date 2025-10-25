@@ -6,6 +6,36 @@ namespace Neomaster.JsonToLinqExpression;
 
 public class ExpressionHelper
 {
+  public static Expression<Func<T, bool>> ParseFilterExpression<T>(
+    JsonDocument doc,
+    ExpressionFieldMapper fieldMapper,
+    string logicOperatorPropertyName,
+    string rulesPropertyName,
+    string operatorPropertyName,
+    string fieldPropertyName,
+    string valuePropertyName)
+  {
+    var par = Expression.Parameter(typeof(T));
+    var condition = ParseExpression<T>(
+      doc.RootElement,
+      par,
+      fieldMapper,
+      logicOperatorPropertyName,
+      rulesPropertyName,
+      operatorPropertyName,
+      fieldPropertyName,
+      valuePropertyName);
+
+    if (condition.CanReduce)
+    {
+      condition = condition.ReduceAndCheck();
+    }
+
+    var exp = Expression.Lambda<Func<T, bool>>(condition, par);
+
+    return exp;
+  }
+
   public static Expression ParseExpression<T>(
     JsonElement condition,
     ParameterExpression par,
