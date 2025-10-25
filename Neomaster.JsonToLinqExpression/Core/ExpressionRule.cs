@@ -30,4 +30,16 @@ public class ExpressionRule
 
     return rule;
   }
+
+  public Expression CreateFilterExpression(
+    ParameterExpression par,
+    ExpressionOperatorMapper mapper = null)
+  {
+    mapper ??= Consts.ExpressionOperatorMappers.Default;
+
+    var prop = Expression.Property(par, Field);
+    var body = mapper.Operators[Operator](prop, ValueConstantExpression);
+
+    return body;
+  }
 }
