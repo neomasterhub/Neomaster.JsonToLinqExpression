@@ -1,0 +1,48 @@
+# Editor configuration, see https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 100
+
+[*.cs]
+dotnet_diagnostic.IDE0130.severity = none
+dotnet_diagnostic.IDE0305.severity = none
+place_attribute_on_same_line = false
+dotnet_style_qualification_for_event = false:silent
+dotnet_style_qualification_for_field = false:silent
+dotnet_style_qualification_for_method = false:silent
+dotnet_style_qualification_for_property = false:silent
+resharper_csharp_default_private_modifier = explicit
+resharper_wrap_after_primary_constructor_declaration_lpar = true
+resharper_wrap_parameters_style = wrap_if_long
+resharper_csharp_max_line_length = 100
+resharper_blank_lines_around_single_line_auto_property = 0
+resharper_blank_lines_around_single_line_invocable = 0
+resharper_blank_lines_around_single_line_property = 0
+resharper_blank_lines_around_single_line_type = 0
+
+# private_fields
+dotnet_naming_rule.private_members_with_underscore.symbols = private_fields
+dotnet_naming_rule.private_members_with_underscore.style = prefix_underscore
+dotnet_naming_rule.private_members_with_underscore.severity = suggestion
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.prefix_underscore.capitalization = camel_case
+dotnet_naming_style.prefix_underscore.required_prefix = _
+
+[*.ts]
+ij_typescript_spaces_within_imports = true
+ij_typescript_force_semicolon_style = true
+ij_typescript_use_semicolon_after_statement = true
+ij_typescript_use_double_quotes = false
+ij_typescript_force_quote_style = true
+ij_typescript_spaces_within_object_literal_braces = true
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
