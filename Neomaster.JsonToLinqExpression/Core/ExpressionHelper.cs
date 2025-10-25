@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using System.Text.Json;
-using static Neomaster.JsonToLinqExpression.Consts;
 
 namespace Neomaster.JsonToLinqExpression;
 
@@ -9,6 +8,7 @@ public static class ExpressionHelper
   public static Expression<Func<T, bool>> ParseFilterExpression<T>(
     JsonDocument doc,
     ExpressionFieldMapper fieldMapper,
+    ExpressionOperatorMapper operatorMapper,
     string logicOperatorPropertyName,
     string rulesPropertyName,
     string operatorPropertyName,
@@ -20,6 +20,7 @@ public static class ExpressionHelper
       doc.RootElement,
       par,
       fieldMapper,
+      operatorMapper,
       logicOperatorPropertyName,
       rulesPropertyName,
       operatorPropertyName,
@@ -40,13 +41,14 @@ public static class ExpressionHelper
     JsonElement condition,
     ParameterExpression par,
     ExpressionFieldMapper fieldMapper,
+    ExpressionOperatorMapper operatorMapper,
     string logicOperatorPropertyName,
     string rulesPropertyName,
     string operatorPropertyName,
     string fieldPropertyName,
     string valuePropertyName)
   {
-    var bind = CreateExpressionBind(condition, logicOperatorPropertyName);
+    var bind = CreateExpressionBind(condition, logicOperatorPropertyName, operatorMapper);
     var rules = EnumerateExpressionRules(condition, rulesPropertyName);
 
     Expression left = null;
@@ -61,6 +63,7 @@ public static class ExpressionHelper
           r,
           par,
           fieldMapper,
+          operatorMapper,
           logicOperatorPropertyName,
           rulesPropertyName,
           operatorPropertyName,
@@ -88,17 +91,15 @@ public static class ExpressionHelper
 
   public static Func<Expression, Expression, Expression> CreateExpressionBind(
     JsonElement condition,
-    string logicOperatorPropertyName)
+    string logicOperatorPropertyName,
+    ExpressionOperatorMapper operatorMapper)
   {
     var logicOperator = condition.GetProperty(logicOperatorPropertyName).GetString();
-
-    var binaryBind = logicOperator == "and" // TODO: Use ExpressionOperatorMapper
-      ? (ExpressionBind)Expression.And
-      : Expression.Or;
+    var logicBind = operatorMapper.Operators[logicOperator];
 
     return (left, right) => left == null
       ? right
-      : binaryBind(left, right);
+      : logicBind(left, right);
   }
 
   public static IEnumerable<JsonElement> EnumerateExpressionRules(
