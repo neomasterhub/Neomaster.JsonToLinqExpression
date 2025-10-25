@@ -13,6 +13,7 @@ public class ExpressionRule
   public static ExpressionRule Parse(
     JsonElement jsonElement,
     ExpressionFieldMapper mapper,
+    string operatorPropertyName = nameof(Operator),
     string fieldPropertyName = nameof(Field),
     string valuePropertyName = nameof(Value))
   {
@@ -21,7 +22,7 @@ public class ExpressionRule
     var field = mapper.Fields[srcFieldName];
     var rule = new ExpressionRule
     {
-      Operator = field.Operator,
+      Operator = jsonElement.GetProperty(operatorPropertyName).GetString(),
       Field = field.Name,
       Value = srcValue,
       ValueConstantExpression = field.GetValue(srcValue),
