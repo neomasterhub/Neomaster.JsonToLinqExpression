@@ -4,7 +4,7 @@ using static Neomaster.JsonToLinqExpression.Consts;
 
 namespace Neomaster.JsonToLinqExpression;
 
-public class ExpressionHelper
+public static class ExpressionHelper
 {
   public static Expression<Func<T, bool>> ParseFilterExpression<T>(
     JsonDocument doc,
