@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neomaster.JsonToLinqExpress
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neomaster.JsonToLinqExpression.UnitTests", "Neomaster.JsonToLinqExpression.UnitTests\Neomaster.JsonToLinqExpression.UnitTests.csproj", "{2C872238-4E19-4329-9945-29DB4FFB4421}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\nuget-publish.yml = .github\workflows\nuget-publish.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
