@@ -5,7 +5,28 @@ namespace Neomaster.JsonToLinqExpression.UnitTests;
 
 public class ExpressionHelperUnitTests
 {
-  public static void CreateExpressionBindTest<TResult>(
+  [Theory]
+  [InlineData(null, null, null)]
+  [InlineData(null, true, null)]
+  [InlineData(null, false, false)] // SQL
+  [InlineData(true, null, null)]
+  [InlineData(false, null, false)] // SQL
+  [InlineData(true, true, true)]
+  [InlineData(false, false, false)]
+  [InlineData(false, true, false)]
+  [InlineData(true, false, false)]
+  public void CreateExpressionBind_AndAlso(bool? left, bool? right, bool? result)
+  {
+    CreateExpressionBindTest(
+      "and",
+      Expression.AndAlso,
+      expr => Expression.Lambda<Func<bool?>>(expr),
+      Expression.Constant(left, typeof(bool?)),
+      Expression.Constant(right, typeof(bool?)),
+      result);
+  }
+
+  private static void CreateExpressionBindTest<TResult>(
     string logicOperator,
     Consts.ExpressionBind logicOperatorExpression,
     Func<Expression, LambdaExpression> buildLambda,
