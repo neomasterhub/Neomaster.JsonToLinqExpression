@@ -8,13 +8,17 @@ public static class Consts
 
   public static class ExpressionOperatorMappers
   {
-    public static readonly ExpressionOperatorMapper Default = new ExpressionOperatorMapper("or", "and")
-      .Add("eq", Expression.Equal)
-      .Add("neq", Expression.NotEqual)
-      .Add("gt", Expression.GreaterThan)
-      .Add("gte", Expression.GreaterThanOrEqual)
-      .Add("lt", Expression.LessThan)
-      .Add("lte", Expression.LessThanOrEqual)
+    public static readonly ExpressionOperatorMapper Default = new ExpressionOperatorMapper()
+      .Add("&", Expression.And)
+      .Add("&&", Expression.AndAlso)
+      .Add("|", Expression.Or)
+      .Add("||", Expression.OrElse)
+      .Add("=", Expression.Equal)
+      .Add("!=", Expression.NotEqual)
+      .Add(">", Expression.GreaterThan)
+      .Add(">=", Expression.GreaterThanOrEqual)
+      .Add("<", Expression.LessThan)
+      .Add("<=", Expression.LessThanOrEqual)
       // TODO: contains, does not contain
       ;
   }
