@@ -29,5 +29,10 @@ public static class Consts
       left == null
       ? right
       : bind(left, right);
+
+    public static readonly Func<ExpressionBind, Expression, Expression, Expression> NullAsFalse = (bind, left, right) =>
+      left == null
+      ? ExpressionHelper.CoalesceNullFalse(right)
+      : bind(ExpressionHelper.CoalesceNullFalse(left), ExpressionHelper.CoalesceNullFalse(right));
   }
 }
