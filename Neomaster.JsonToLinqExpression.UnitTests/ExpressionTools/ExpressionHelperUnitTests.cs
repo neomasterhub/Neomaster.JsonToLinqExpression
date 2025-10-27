@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Text.Json;
+using static Neomaster.JsonToLinqExpression.Consts;
 
 namespace Neomaster.JsonToLinqExpression.UnitTests;
 
@@ -8,16 +9,17 @@ public class ExpressionHelperUnitTests
   [Theory]
   [InlineData(null, null, null)]
   [InlineData(null, true, null)]
-  [InlineData(null, false, false)] // SQL, TODO: Add logic modes.
+  [InlineData(null, false, false)]
   [InlineData(true, null, null)]
-  [InlineData(false, null, false)] // SQL, TODO: Add logic modes.
   [InlineData(true, true, true)]
-  [InlineData(false, false, false)]
-  [InlineData(false, true, false)]
   [InlineData(true, false, false)]
-  public void CreateExpressionBind_AndAlso(bool? left, bool? right, bool? result)
+  [InlineData(false, null, false)]
+  [InlineData(false, true, false)]
+  [InlineData(false, false, false)]
+  public void CreateExpressionBind_Sql_AndAlso(bool? left, bool? right, bool? result)
   {
     CreateExpressionBindTest(
+      ExpressionBindBuilders.Sql,
       "and",
       Expression.AndAlso,
       expr => Expression.Lambda<Func<bool?>>(expr),
@@ -26,9 +28,76 @@ public class ExpressionHelperUnitTests
       result);
   }
 
+  [Theory]
+  [InlineData(null, null, null)]
+  [InlineData(null, true, true)]
+  [InlineData(null, false, null)]
+  [InlineData(true, null, true)]
+  [InlineData(true, true, true)]
+  [InlineData(true, false, true)]
+  [InlineData(false, null, null)]
+  [InlineData(false, true, true)]
+  [InlineData(false, false, false)]
+  public void CreateExpressionBind_Sql_OrElse(bool? left, bool? right, bool? result)
+  {
+    CreateExpressionBindTest(
+      ExpressionBindBuilders.Sql,
+      "or",
+      Expression.OrElse,
+      expr => Expression.Lambda<Func<bool?>>(expr),
+      Expression.Constant(left, typeof(bool?)),
+      Expression.Constant(right, typeof(bool?)),
+      result);
+  }
+
+  [Theory]
+  [InlineData(null, null, false)]
+  [InlineData(null, true, false)]
+  [InlineData(null, false, false)]
+  [InlineData(true, null, false)]
+  [InlineData(true, true, true)]
+  [InlineData(true, false, false)]
+  [InlineData(false, null, false)]
+  [InlineData(false, true, false)]
+  [InlineData(false, false, false)]
+  public void CreateExpressionBind_NullAsFalse_AndAlso(bool? left, bool? right, bool? result)
+  {
+    CreateExpressionBindTest(
+      ExpressionBindBuilders.NullAsFalse,
+      "and",
+      Expression.AndAlso,
+      expr => Expression.Lambda<Func<bool>>(expr),
+      Expression.Constant(left, typeof(bool?)),
+      Expression.Constant(right, typeof(bool?)),
+      result);
+  }
+
+  [Theory]
+  [InlineData(null, null, false)]
+  [InlineData(null, true, true)]
+  [InlineData(null, false, false)]
+  [InlineData(true, null, true)]
+  [InlineData(true, true, true)]
+  [InlineData(true, false, true)]
+  [InlineData(false, null, false)]
+  [InlineData(false, true, true)]
+  [InlineData(false, false, false)]
+  public void CreateExpressionBind_NullAsFalse_OrElse(bool? left, bool? right, bool? result)
+  {
+    CreateExpressionBindTest(
+      ExpressionBindBuilders.NullAsFalse,
+      "or",
+      Expression.OrElse,
+      expr => Expression.Lambda<Func<bool>>(expr),
+      Expression.Constant(left, typeof(bool?)),
+      Expression.Constant(right, typeof(bool?)),
+      result);
+  }
+
   private static void CreateExpressionBindTest<TResult>(
+    Func<ExpressionBind, Expression, Expression, Expression> buildBind,
     string logicOperator,
-    Consts.ExpressionBind logicOperatorExpression,
+    ExpressionBind logicOperatorExpression,
     Func<Expression, LambdaExpression> buildLambda,
     Expression leftExpression,
     Expression rightExpression,
@@ -41,7 +110,8 @@ public class ExpressionHelperUnitTests
     var bind = ExpressionHelper.CreateExpressionBind(
       conditionJsonElement,
       logicOperatorPropertyName,
-      operatorMapper);
+      operatorMapper,
+      buildBind);
 
     var binded = bind(leftExpression, rightExpression);
     var lambda = buildLambda(binded).Compile();
