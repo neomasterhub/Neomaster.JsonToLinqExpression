@@ -28,6 +28,28 @@ public class ExpressionHelperUnitTests
       result);
   }
 
+  [Theory]
+  [InlineData(null, null, null)]
+  [InlineData(null, true, true)]
+  [InlineData(null, false, null)]
+  [InlineData(true, null, true)]
+  [InlineData(true, true, true)]
+  [InlineData(true, false, true)]
+  [InlineData(false, null, null)]
+  [InlineData(false, true, true)]
+  [InlineData(false, false, false)]
+  public void CreateExpressionBind_Sql_OrElse(bool? left, bool? right, bool? result)
+  {
+    CreateExpressionBindTest(
+      ExpressionBindBuilders.Sql,
+      "or",
+      Expression.OrElse,
+      expr => Expression.Lambda<Func<bool?>>(expr),
+      Expression.Constant(left, typeof(bool?)),
+      Expression.Constant(right, typeof(bool?)),
+      result);
+  }
+
   private static void CreateExpressionBindTest<TResult>(
     Func<ExpressionBind, Expression, Expression, Expression> buildBind,
     string logicOperator,
