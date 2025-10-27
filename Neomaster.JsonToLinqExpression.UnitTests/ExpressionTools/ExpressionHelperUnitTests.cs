@@ -8,9 +8,9 @@ public class ExpressionHelperUnitTests
   [Theory]
   [InlineData(null, null, null)]
   [InlineData(null, true, null)]
-  [InlineData(null, false, false)] // SQL
+  [InlineData(null, false, false)] // SQL, TODO: Add logic modes.
   [InlineData(true, null, null)]
-  [InlineData(false, null, false)] // SQL
+  [InlineData(false, null, false)] // SQL, TODO: Add logic modes.
   [InlineData(true, true, true)]
   [InlineData(false, false, false)]
   [InlineData(false, true, false)]
