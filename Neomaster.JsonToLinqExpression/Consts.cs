@@ -25,11 +25,6 @@ public static class Consts
 
   public static class ExpressionBindBuilders
   {
-    public static readonly Func<ExpressionBind, Expression, Expression, Expression> Code = (bind, left, right) =>
-      left == null || right == null
-      ? Expression.Constant(null, typeof(bool?))
-      : bind(left, right);
-
     public static readonly Func<ExpressionBind, Expression, Expression, Expression> Sql = (bind, left, right) =>
       left == null
       ? right
