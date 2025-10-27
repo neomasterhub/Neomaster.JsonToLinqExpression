@@ -94,6 +94,20 @@ public class ExpressionHelperUnitTests
       result);
   }
 
+  [Theory]
+  [InlineData(null, false)]
+  [InlineData(false, false)]
+  [InlineData(true, true)]
+  public void CoalesceNullFalse(bool? input, bool output)
+  {
+    var inputExpression = Expression.Constant(input, typeof(bool?));
+
+    var outputExpression = Expression.Constant(output, typeof(bool));
+    var outputFunc = Expression.Lambda<Func<bool>>(outputExpression).Compile();
+
+    Assert.Equal(output, outputFunc());
+  }
+
   private static void CreateExpressionBindTest<TResult>(
     Func<ExpressionBind, Expression, Expression, Expression> buildBind,
     string logicOperator,
