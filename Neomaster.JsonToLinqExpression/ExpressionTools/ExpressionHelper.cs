@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Text.Json;
+using static Neomaster.JsonToLinqExpression.Consts;
 
 namespace Neomaster.JsonToLinqExpression;
 
@@ -13,7 +14,8 @@ public static class ExpressionHelper
     string rulesPropertyName,
     string operatorPropertyName,
     string fieldPropertyName,
-    string valuePropertyName)
+    string valuePropertyName,
+    Func<ExpressionBind, Expression, Expression, Expression> bindBuilder)
   {
     var par = Expression.Parameter(typeof(T));
     var condition = ParseExpression<T>(
@@ -25,7 +27,8 @@ public static class ExpressionHelper
       rulesPropertyName,
       operatorPropertyName,
       fieldPropertyName,
-      valuePropertyName);
+      valuePropertyName,
+      bindBuilder);
 
     if (condition.CanReduce)
     {
@@ -46,9 +49,10 @@ public static class ExpressionHelper
     string rulesPropertyName,
     string operatorPropertyName,
     string fieldPropertyName,
-    string valuePropertyName)
+    string valuePropertyName,
+    Func<ExpressionBind, Expression, Expression, Expression> bindBuilder)
   {
-    var bind = CreateExpressionBind(condition, logicOperatorPropertyName, operatorMapper);
+    var bind = CreateExpressionBind(condition, logicOperatorPropertyName, operatorMapper, bindBuilder);
     var rules = EnumerateExpressionRules(condition, rulesPropertyName);
 
     Expression left = null;
@@ -68,7 +72,8 @@ public static class ExpressionHelper
           rulesPropertyName,
           operatorPropertyName,
           fieldPropertyName,
-          valuePropertyName);
+          valuePropertyName,
+          bindBuilder);
 
         left = bind(left, right);
 
@@ -92,14 +97,13 @@ public static class ExpressionHelper
   public static Func<Expression, Expression, Expression> CreateExpressionBind(
     JsonElement condition,
     string logicOperatorPropertyName,
-    ExpressionOperatorMapper operatorMapper)
+    ExpressionOperatorMapper operatorMapper,
+    Func<ExpressionBind, Expression, Expression, Expression> bindBuilder)
   {
     var logicOperator = condition.GetProperty(logicOperatorPropertyName).GetString();
     var logicBind = operatorMapper.Operators[logicOperator];
 
-    return (left, right) => left == null
-      ? right
-      : logicBind(left, right);
+    return (left, right) => bindBuilder(logicBind, left, right);
   }
 
   public static IEnumerable<JsonElement> EnumerateExpressionRules(

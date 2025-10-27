@@ -22,4 +22,12 @@ public static class Consts
       // TODO: contains, does not contain
       ;
   }
+
+  public static class ExpressionBindBuilders
+  {
+    public static readonly Func<ExpressionBind, Expression, Expression, Expression> Sql = (bind, left, right) =>
+      left == null
+      ? right
+      : bind(left, right);
+  }
 }
