@@ -10,11 +10,11 @@ public class ExpressionHelperUnitTests
   [InlineData(null, true, null)]
   [InlineData(null, false, false)] // SQL, TODO: Add logic modes.
   [InlineData(true, null, null)]
-  [InlineData(false, null, false)] // SQL, TODO: Add logic modes.
   [InlineData(true, true, true)]
-  [InlineData(false, false, false)]
-  [InlineData(false, true, false)]
   [InlineData(true, false, false)]
+  [InlineData(false, null, false)] // SQL, TODO: Add logic modes.
+  [InlineData(false, true, false)]
+  [InlineData(false, false, false)]
   public void CreateExpressionBind_AndAlso(bool? left, bool? right, bool? result)
   {
     CreateExpressionBindTest(
