@@ -9,6 +9,28 @@ public class ExpressionHelperUnitTests
   [Theory]
   [InlineData(null, null, null)]
   [InlineData(null, true, null)]
+  [InlineData(null, false, null)]
+  [InlineData(true, null, null)]
+  [InlineData(true, true, true)]
+  [InlineData(true, false, false)]
+  [InlineData(false, null, null)]
+  [InlineData(false, true, false)]
+  [InlineData(false, false, false)]
+  public void CreateExpressionBind_Code_AndAlso(bool? left, bool? right, bool? result)
+  {
+    CreateExpressionBindTest(
+      ExpressionBindBuilders.Code,
+      "and",
+      Expression.AndAlso,
+      expr => Expression.Lambda<Func<bool?>>(expr),
+      Expression.Constant(left, typeof(bool?)),
+      Expression.Constant(right, typeof(bool?)),
+      result);
+  }
+
+  [Theory]
+  [InlineData(null, null, null)]
+  [InlineData(null, true, null)]
   [InlineData(null, false, false)]
   [InlineData(true, null, null)]
   [InlineData(true, true, true)]
