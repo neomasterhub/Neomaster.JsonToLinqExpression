@@ -106,6 +106,13 @@ public static class ExpressionHelper
     return (left, right) => bindBuilder(logicBind, left, right);
   }
 
+  public static Expression CoalesceNullFalse(Expression expr)
+  {
+    return expr.Type == typeof(bool?)
+      ? Expression.Coalesce(expr, Expression.Constant(false, typeof(bool)))
+      : expr;
+  }
+
   public static IEnumerable<JsonElement> EnumerateExpressionRules(
     JsonElement condition,
     string rulesPropertyName)
