@@ -41,4 +41,21 @@ public static class Consts
     public const string JsonPropertyNotFound = "Json property \"{0}\" not found.";
     public const string JsonPropertyNotType = "Json property \"{0}\" must be of type \"{1}\".";
   }
+
+  public static class ErrorDataKeys
+  {
+    public static class JsonPropertyNotFound
+    {
+      public const string Json = nameof(Json);
+      public const string Property = nameof(Property);
+    }
+
+    public static class JsonPropertyNotType
+    {
+      public const string Json = nameof(Json);
+      public const string Property = nameof(Property);
+      public const string ExpectedType = nameof(ExpectedType);
+      public const string CurrentType = nameof(CurrentType);
+    }
+  }
 }
