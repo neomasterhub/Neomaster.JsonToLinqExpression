@@ -147,6 +147,15 @@ public class ExpressionHelperUnitTests
     Assert.Empty(enumeratedRules);
   }
 
+  [Fact]
+  public void EnumerateExpressionRules_ShouldThrowKeyNotFoundException_MissingKey()
+  {
+    var treeJsonElement = JsonSerializer.SerializeToElement(new { X = "1" });
+
+    Assert.Throws<KeyNotFoundException>(
+      () => ExpressionHelper.EnumerateExpressionRules(treeJsonElement, "Rules").ToArray());
+  }
+
   private static void CreateExpressionBindTest<TResult>(
     Func<ExpressionBind, Expression, Expression, Expression> buildBind,
     string logicOperator,
