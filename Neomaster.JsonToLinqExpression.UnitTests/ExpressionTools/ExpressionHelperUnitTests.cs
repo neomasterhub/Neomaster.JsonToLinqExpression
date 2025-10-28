@@ -108,6 +108,30 @@ public class ExpressionHelperUnitTests
     Assert.Equal(output, outputFunc());
   }
 
+  [Fact]
+  public void EnumerateExpressionRules_ShouldEnumerateRootRules()
+  {
+    var rules = Enumerable
+      .Range(1, 3)
+      .Select(n => new
+      {
+        X = $"1.{n}",
+        Rules = new[] { new { X = $"1.{n}.1" } },
+      })
+      .ToArray();
+    var tree = new
+    {
+      X = "1",
+      Rules = rules,
+    };
+    var treeJsonElement = JsonSerializer.SerializeToElement(tree);
+
+    var enumeratedRules = ExpressionHelper.EnumerateExpressionRules(treeJsonElement, nameof(tree.Rules)).ToArray();
+
+    Assert.Equal(rules.Length, enumeratedRules.Length);
+    Assert.Equal(JsonSerializer.Serialize(rules), JsonSerializer.Serialize(enumeratedRules));
+  }
+
   private static void CreateExpressionBindTest<TResult>(
     Func<ExpressionBind, Expression, Expression, Expression> buildBind,
     string logicOperator,
