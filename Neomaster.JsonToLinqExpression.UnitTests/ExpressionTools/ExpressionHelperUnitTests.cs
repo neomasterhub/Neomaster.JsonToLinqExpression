@@ -108,6 +108,81 @@ public class ExpressionHelperUnitTests
     Assert.Equal(output, outputFunc());
   }
 
+  [Fact]
+  public void EnumerateExpressionRules_ShouldEnumerateRootRules()
+  {
+    var rules = Enumerable
+      .Range(1, 3)
+      .Select(n => new
+      {
+        X = $"1.{n}",
+        Rules = new[] { new { X = $"1.{n}.1" } },
+      })
+      .ToArray();
+    var tree = new
+    {
+      X = "1",
+      Rules = rules,
+    };
+    var treeJsonElement = JsonSerializer.SerializeToElement(tree);
+
+    var enumeratedRules = ExpressionHelper.EnumerateExpressionRules(treeJsonElement, nameof(tree.Rules)).ToArray();
+
+    Assert.Equal(rules.Length, enumeratedRules.Length);
+    Assert.Equal(JsonSerializer.Serialize(rules), JsonSerializer.Serialize(enumeratedRules));
+  }
+
+  [Fact]
+  public void EnumerateExpressionRules_ShouldIgnoreEmptyRules()
+  {
+    var tree = new
+    {
+      X = "1",
+      Rules = new object[0],
+    };
+    var treeJsonElement = JsonSerializer.SerializeToElement(tree);
+
+    var enumeratedRules = ExpressionHelper.EnumerateExpressionRules(treeJsonElement, nameof(tree.Rules)).ToArray();
+
+    Assert.Empty(enumeratedRules);
+  }
+
+  [Fact]
+  public void EnumerateExpressionRules_ShouldThrowKeyNotFoundException_MissingKey()
+  {
+    const string key = "Rules";
+    var tree = new { X = "1" };
+    var treeJson = JsonSerializer.Serialize(tree);
+    var treeJsonElement = JsonSerializer.SerializeToElement(tree);
+    var expectedExMessage = string.Format(ErrorMessages.JsonPropertyNotFound, key);
+
+    var ex = Assert.Throws<KeyNotFoundException>(
+      () => ExpressionHelper.EnumerateExpressionRules(treeJsonElement, key).ToArray());
+
+    Assert.Equal(expectedExMessage, ex.Message);
+    Assert.Equal(key, ex.Data[ErrorDataKeys.JsonPropertyNotFound.Property]);
+    Assert.Equal(treeJson, ex.Data[ErrorDataKeys.JsonPropertyNotFound.Json]);
+  }
+
+  [Fact]
+  public void EnumerateExpressionRules_ShouldThrowInvalidOperationException_NotArray()
+  {
+    var tree = new { X = "1", Rules = "2" };
+    var treeJson = JsonSerializer.Serialize(tree);
+    var treeJsonElement = JsonSerializer.SerializeToElement(tree);
+    var key = nameof(tree.Rules);
+    var expectedExMessage = string.Format(ErrorMessages.JsonPropertyNotType, key, JsonValueKind.Array);
+
+    var ex = Assert.Throws<InvalidOperationException>(
+      () => ExpressionHelper.EnumerateExpressionRules(treeJsonElement, key).ToArray());
+
+    Assert.Equal(expectedExMessage, ex.Message);
+    Assert.Equal(key, ex.Data[ErrorDataKeys.JsonPropertyNotType.Property]);
+    Assert.Equal(treeJson, ex.Data[ErrorDataKeys.JsonPropertyNotType.Json]);
+    Assert.Equal(JsonValueKind.Array, ex.Data[ErrorDataKeys.JsonPropertyNotType.ExpectedType]);
+    Assert.Equal(JsonValueKind.String, ex.Data[ErrorDataKeys.JsonPropertyNotType.CurrentType]);
+  }
+
   private static void CreateExpressionBindTest<TResult>(
     Func<ExpressionBind, Expression, Expression, Expression> buildBind,
     string logicOperator,
