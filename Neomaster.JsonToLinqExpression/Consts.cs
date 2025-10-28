@@ -35,4 +35,10 @@ public static class Consts
       ? ExpressionHelper.CoalesceNullFalse(right)
       : bind(ExpressionHelper.CoalesceNullFalse(left), ExpressionHelper.CoalesceNullFalse(right));
   }
+
+  public static class ErrorMessages
+  {
+    public const string JsonPropertyNotFound = "Json property \"{0}\" not found.";
+    public const string JsonPropertyNotType = "Json property \"{0}\" must be of type \"{1}\".";
+  }
 }
