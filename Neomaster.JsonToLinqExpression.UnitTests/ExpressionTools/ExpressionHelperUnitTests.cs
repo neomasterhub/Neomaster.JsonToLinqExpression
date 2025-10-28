@@ -132,6 +132,21 @@ public class ExpressionHelperUnitTests
     Assert.Equal(JsonSerializer.Serialize(rules), JsonSerializer.Serialize(enumeratedRules));
   }
 
+  [Fact]
+  public void EnumerateExpressionRules_ShouldIgnoreEmptyRules()
+  {
+    var tree = new
+    {
+      X = "1",
+      Rules = new object[0],
+    };
+    var treeJsonElement = JsonSerializer.SerializeToElement(tree);
+
+    var enumeratedRules = ExpressionHelper.EnumerateExpressionRules(treeJsonElement, nameof(tree.Rules)).ToArray();
+
+    Assert.Empty(enumeratedRules);
+  }
+
   private static void CreateExpressionBindTest<TResult>(
     Func<ExpressionBind, Expression, Expression, Expression> buildBind,
     string logicOperator,
