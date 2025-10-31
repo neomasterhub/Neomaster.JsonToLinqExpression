@@ -45,6 +45,105 @@ public class ExpressionRuleUnitTests(ITestOutputHelper output)
   }
 
   [Fact]
+  public void Parse_ShouldThrowKeyNotFoundException_InvalidOperatorPropertyName()
+  {
+    const string invalidKey = "0";
+    var rule = new
+    {
+      op = "1",
+      field = "2",
+      value = "3",
+    };
+    var ruleJson = JsonSerializer.Serialize(rule);
+    var ruleJsonElement = JsonSerializer.SerializeToElement(rule);
+    var expectedExMessage = string.Format(ErrorMessages.JsonPropertyNotFound, invalidKey);
+    var mapper = new ExpressionFieldMapper()
+      .Add(
+        rule.field,
+        new ExpressionField
+        {
+          Name = rule.field,
+          GetValue = je => Expression.Constant(je.Value.GetString()),
+        });
+
+    var ex = Assert.Throws<KeyNotFoundException>(() => ExpressionRule.Parse(
+      ruleJsonElement,
+      mapper,
+      invalidKey,
+      nameof(rule.field),
+      nameof(rule.value)));
+
+    Assert.Equal(expectedExMessage, ex.Message);
+    Assert.Equal(invalidKey, ex.Data[ErrorDataKeys.Property]);
+    Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.Json]);
+  }
+
+  [Fact]
+  public void Parse_ShouldThrowInvalidOperationException_InvalidOperatorPropertyType()
+  {
+    var rule = new
+    {
+      op = 1,
+      field = "2",
+      value = "3",
+    };
+    var operatorPropertyName = nameof(rule.op);
+    var ruleJson = JsonSerializer.Serialize(rule);
+    var ruleJsonElement = JsonSerializer.SerializeToElement(rule);
+    var expectedExMessage = string.Format(ErrorMessages.JsonPropertyNotType, operatorPropertyName, JsonValueKind.String);
+
+    var ex = Assert.Throws<InvalidOperationException>(() => ExpressionRule.Parse(
+      ruleJsonElement,
+      new(),
+      operatorPropertyName,
+      nameof(rule.field),
+      nameof(rule.value)));
+
+    Assert.Equal(expectedExMessage, ex.Message);
+    Assert.Equal(operatorPropertyName, ex.Data[ErrorDataKeys.Property]);
+    Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.Json]);
+    Assert.Equal(JsonValueKind.String, ex.Data[ErrorDataKeys.ExpectedType]);
+    Assert.Equal(JsonValueKind.Number, ex.Data[ErrorDataKeys.CurrentType]);
+  }
+
+  [Theory]
+  [InlineData("")]
+  [InlineData(" ")]
+  public void Parse_ShouldThrowArgumentException_InvalidFieldOperatorValue(string op)
+  {
+    // null - invalid json property type
+    var rule = new
+    {
+      op,
+      field = "2",
+      value = "3",
+    };
+    var operatorPropertyName = nameof(rule.op);
+    var ruleJson = JsonSerializer.Serialize(rule);
+    var ruleJsonElement = JsonSerializer.SerializeToElement(rule);
+    var expectedExMessage = string.Format(ErrorMessages.JsonPropertyEmpty, operatorPropertyName);
+    var mapper = new ExpressionFieldMapper()
+      .Add(
+        rule.field,
+        new ExpressionField
+        {
+          Name = rule.field,
+          GetValue = je => Expression.Constant(je.Value.GetString()),
+        });
+
+    var ex = Assert.Throws<ArgumentException>(() => ExpressionRule.Parse(
+      ruleJsonElement,
+      mapper,
+      operatorPropertyName,
+      nameof(rule.field),
+      nameof(rule.value)));
+
+    Assert.Equal(expectedExMessage, ex.Message);
+    Assert.Equal(operatorPropertyName, ex.Data[ErrorDataKeys.Property]);
+    Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.Json]);
+  }
+
+  [Fact]
   public void Parse_ShouldThrowKeyNotFoundException_InvalidFieldPropertyName()
   {
     const string invalidKey = "0";
