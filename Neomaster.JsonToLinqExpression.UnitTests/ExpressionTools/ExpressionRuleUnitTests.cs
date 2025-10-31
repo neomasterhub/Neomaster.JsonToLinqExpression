@@ -275,4 +275,43 @@ public class ExpressionRuleUnitTests(ITestOutputHelper output)
     Assert.Equal(invalidKey, ex.Data[ErrorDataKeys.Property]);
     Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.Json]);
   }
+
+  [Fact]
+  public void CreateFilterExpression()
+  {
+    const string expectedFilterString = "(user.Id == 0)";
+    var rule = new
+    {
+      op = "=",
+      field = "user",
+      value = 0,
+    };
+    var fieldPropertyName = rule.field;
+    var jsonElement = JsonSerializer.SerializeToElement(rule);
+    var opMapper = new ExpressionOperatorMapper()
+      .Add(rule.op, Expression.Equal);
+    var fieldMapper = new ExpressionFieldMapper()
+      .Add(
+        fieldPropertyName,
+        new ExpressionField
+        {
+          Name = nameof(User.Id),
+          GetValue = je => Expression.Constant(rule.value),
+        });
+    var par = Expression.Parameter(typeof(User), fieldPropertyName);
+    var ruleParsed = ExpressionRule.Parse(
+      jsonElement,
+      fieldMapper,
+      nameof(rule.op),
+      nameof(rule.field),
+      nameof(rule.value));
+
+    var filter = ruleParsed.CreateFilterExpression(par, opMapper);
+    var lambda = Expression.Lambda<Func<User, bool>>(filter, par).Compile();
+
+    Assert.Equal(expectedFilterString, filter.ToString());
+    Assert.True(lambda(new User { Id = 0 }));
+    Assert.False(lambda(new User { Id = 1 }));
+    Assert.False(lambda(new User { Id = -1 }));
+  }
 }
