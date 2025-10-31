@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Text.Json;
+using static Neomaster.JsonToLinqExpression.Consts;
 
 namespace Neomaster.JsonToLinqExpression;
 
@@ -17,7 +18,29 @@ public class ExpressionRule
     string fieldPropertyName = nameof(Field),
     string valuePropertyName = nameof(Value))
   {
-    var srcFieldName = jsonElement.GetProperty(fieldPropertyName).GetString();
+    if (!jsonElement.TryGetProperty(fieldPropertyName, out var fieldProperty))
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, fieldPropertyName);
+      var ex = new KeyNotFoundException(exMessage);
+      ex.Data[ErrorDataKeys.JsonPropertyNotFound.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.JsonPropertyNotFound.Property] = fieldPropertyName;
+
+      throw ex;
+    }
+
+    if (fieldProperty.ValueKind != JsonValueKind.String)
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotType, fieldPropertyName, JsonValueKind.String);
+      var ex = new InvalidOperationException(exMessage);
+      ex.Data[ErrorDataKeys.JsonPropertyNotType.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.JsonPropertyNotType.Property] = fieldPropertyName;
+      ex.Data[ErrorDataKeys.JsonPropertyNotType.ExpectedType] = JsonValueKind.String;
+      ex.Data[ErrorDataKeys.JsonPropertyNotType.CurrentType] = fieldProperty.ValueKind;
+
+      throw ex;
+    }
+
+    var srcFieldName = fieldProperty.GetString();
     var srcValue = jsonElement.GetProperty(valuePropertyName);
     var field = mapper.Fields[srcFieldName];
     var rule = new ExpressionRule
