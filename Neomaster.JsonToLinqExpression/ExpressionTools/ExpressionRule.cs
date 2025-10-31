@@ -41,6 +41,17 @@ public class ExpressionRule
     }
 
     var srcFieldName = fieldProperty.GetString();
+
+    if (string.IsNullOrWhiteSpace(srcFieldName))
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyEmpty, fieldPropertyName);
+      var ex = new ArgumentException(exMessage);
+      ex.Data[ErrorDataKeys.JsonPropertyEmpty.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.JsonPropertyEmpty.Property] = fieldPropertyName;
+
+      throw ex;
+    }
+
     var srcValue = jsonElement.GetProperty(valuePropertyName);
     var field = mapper.Fields[srcFieldName];
     var rule = new ExpressionRule
