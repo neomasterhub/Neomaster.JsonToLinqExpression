@@ -8,20 +8,20 @@ public class ExpressionFieldUnitTests
   [Fact]
   public void GetValue()
   {
-    GetValue_T(typeof(int), je => je?.GetInt32(), 1);
-    GetValue_T(typeof(int?), je => je?.GetInt32(), null);
-    GetValue_T(typeof(int?), je => je?.GetInt32(), (int?)1);
-    GetValue_T(typeof(string), je => je?.GetString(), null);
-    GetValue_T(typeof(string), je => je?.GetString(), "1");
-    GetValue_T(typeof(ConsoleColor), je => je?.Deserialize<ConsoleColor>(), ConsoleColor.Red);
-    GetValue_T(typeof(ConsoleColor?), je => je?.Deserialize<ConsoleColor>(), (ConsoleColor?)null);
-    GetValue_T(typeof(ConsoleColor?), je => je?.Deserialize<ConsoleColor>(), (ConsoleColor?)ConsoleColor.Red);
-    GetValue_T(typeof(DateTime), je => je?.Deserialize<DateTime>(), DateTime.Now);
-    GetValue_T(typeof(DateTime?), je => je?.Deserialize<DateTime>(), (DateTime?)null);
-    GetValue_T(typeof(DateTime?), je => je?.Deserialize<DateTime>(), (DateTime?)DateTime.Now);
+    GetValueTest(typeof(int), je => je?.GetInt32(), 1);
+    GetValueTest(typeof(int?), je => je?.GetInt32(), null);
+    GetValueTest(typeof(int?), je => je?.GetInt32(), (int?)1);
+    GetValueTest(typeof(string), je => je?.GetString(), null);
+    GetValueTest(typeof(string), je => je?.GetString(), "1");
+    GetValueTest(typeof(ConsoleColor), je => je?.Deserialize<ConsoleColor>(), ConsoleColor.Red);
+    GetValueTest(typeof(ConsoleColor?), je => je?.Deserialize<ConsoleColor>(), (ConsoleColor?)null);
+    GetValueTest(typeof(ConsoleColor?), je => je?.Deserialize<ConsoleColor>(), (ConsoleColor?)ConsoleColor.Red);
+    GetValueTest(typeof(DateTime), je => je?.Deserialize<DateTime>(), DateTime.Now);
+    GetValueTest(typeof(DateTime?), je => je?.Deserialize<DateTime>(), (DateTime?)null);
+    GetValueTest(typeof(DateTime?), je => je?.Deserialize<DateTime>(), (DateTime?)DateTime.Now);
   }
 
-  private static void GetValue_T(
+  private static void GetValueTest(
     Type expectedType,
     Func<JsonElement?, object> convertJsonElement,
     object expectedValue)

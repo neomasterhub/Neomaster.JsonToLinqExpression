@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Text.Json;
+using static Neomaster.JsonToLinqExpression.Consts;
 
 namespace Neomaster.JsonToLinqExpression;
 
@@ -17,15 +18,17 @@ public class ExpressionRule
     string fieldPropertyName = nameof(Field),
     string valuePropertyName = nameof(Value))
   {
-    var srcFieldName = jsonElement.GetProperty(fieldPropertyName).GetString();
-    var srcValue = jsonElement.GetProperty(valuePropertyName);
+    var op = GetPropertyRequiredStringValue(jsonElement, operatorPropertyName, JsonValueKind.String);
+    var srcFieldName = GetPropertyRequiredStringValue(jsonElement, fieldPropertyName, JsonValueKind.String);
+    var valueProperty = GetProperty(jsonElement, valuePropertyName);
+
     var field = mapper.Fields[srcFieldName];
     var rule = new ExpressionRule
     {
-      Operator = jsonElement.GetProperty(operatorPropertyName).GetString(),
+      Operator = op,
       Field = field.Name,
-      Value = srcValue,
-      ValueConstantExpression = field.GetValue(srcValue),
+      Value = valueProperty,
+      ValueConstantExpression = field.GetValue(valueProperty),
     };
 
     return rule;
@@ -33,13 +36,62 @@ public class ExpressionRule
 
   public Expression CreateFilterExpression(
     ParameterExpression par,
-    ExpressionOperatorMapper mapper = null)
+    ExpressionOperatorMapper mapper)
   {
-    mapper ??= Consts.ExpressionOperatorMappers.Default;
-
     var prop = Expression.Property(par, Field);
     var body = mapper.Operators[Operator](prop, ValueConstantExpression);
 
     return body;
+  }
+
+  private static JsonElement GetProperty(
+    JsonElement obj,
+    string propertyName,
+    JsonValueKind? expectedPropertyType = null)
+  {
+    if (!obj.TryGetProperty(propertyName, out var property))
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, propertyName);
+      var ex = new KeyNotFoundException(exMessage);
+      ex.Data[ErrorDataKeys.Json] = obj.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = propertyName;
+
+      throw ex;
+    }
+
+    if (expectedPropertyType != null
+      && property.ValueKind != expectedPropertyType)
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotType, propertyName, expectedPropertyType);
+      var ex = new InvalidOperationException(exMessage);
+      ex.Data[ErrorDataKeys.Json] = obj.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = propertyName;
+      ex.Data[ErrorDataKeys.ExpectedType] = expectedPropertyType;
+      ex.Data[ErrorDataKeys.CurrentType] = property.ValueKind;
+
+      throw ex;
+    }
+
+    return property;
+  }
+
+  public static string GetPropertyRequiredStringValue(
+    JsonElement obj,
+    string propertyName,
+    JsonValueKind? expectedPropertyType = null)
+  {
+    var value = GetProperty(obj, propertyName, expectedPropertyType).GetString();
+
+    if (!string.IsNullOrWhiteSpace(value))
+    {
+      return value;
+    }
+
+    var exMessage = string.Format(ErrorMessages.JsonPropertyEmpty, propertyName);
+    var ex = new ArgumentException(exMessage);
+    ex.Data[ErrorDataKeys.Json] = obj.GetRawText();
+    ex.Data[ErrorDataKeys.Property] = propertyName;
+
+    throw ex;
   }
 }

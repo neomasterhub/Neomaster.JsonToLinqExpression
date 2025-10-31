@@ -87,7 +87,7 @@ public static class ExpressionHelper
         fieldPropertyName,
         valuePropertyName);
 
-      right = rule.CreateFilterExpression(par);
+      right = rule.CreateFilterExpression(par, operatorMapper);
       left = bind(left, right);
     }
 
@@ -121,8 +121,8 @@ public static class ExpressionHelper
     {
       var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, rulesPropertyName);
       var ex = new KeyNotFoundException(exMessage);
-      ex.Data[ErrorDataKeys.JsonPropertyNotFound.Json] = condition.GetRawText();
-      ex.Data[ErrorDataKeys.JsonPropertyNotFound.Property] = rulesPropertyName;
+      ex.Data[ErrorDataKeys.Json] = condition.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = rulesPropertyName;
 
       throw ex;
     }
@@ -131,10 +131,10 @@ public static class ExpressionHelper
     {
       var exMessage = string.Format(ErrorMessages.JsonPropertyNotType, rulesPropertyName, JsonValueKind.Array);
       var ex = new InvalidOperationException(exMessage);
-      ex.Data[ErrorDataKeys.JsonPropertyNotType.Json] = condition.GetRawText();
-      ex.Data[ErrorDataKeys.JsonPropertyNotType.Property] = rulesPropertyName;
-      ex.Data[ErrorDataKeys.JsonPropertyNotType.ExpectedType] = JsonValueKind.Array;
-      ex.Data[ErrorDataKeys.JsonPropertyNotType.CurrentType] = rulesJsonElement.ValueKind;
+      ex.Data[ErrorDataKeys.Json] = condition.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = rulesPropertyName;
+      ex.Data[ErrorDataKeys.ExpectedType] = JsonValueKind.Array;
+      ex.Data[ErrorDataKeys.CurrentType] = rulesJsonElement.ValueKind;
 
       throw ex;
     }
