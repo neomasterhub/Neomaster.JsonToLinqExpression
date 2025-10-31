@@ -87,7 +87,7 @@ public static class ExpressionHelper
         fieldPropertyName,
         valuePropertyName);
 
-      right = rule.CreateFilterExpression(par);
+      right = rule.CreateFilterExpression(par, operatorMapper);
       left = bind(left, right);
     }
 

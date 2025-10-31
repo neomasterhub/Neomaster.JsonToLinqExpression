@@ -36,10 +36,8 @@ public class ExpressionRule
 
   public Expression CreateFilterExpression(
     ParameterExpression par,
-    ExpressionOperatorMapper mapper = null)
+    ExpressionOperatorMapper mapper)
   {
-    mapper ??= Consts.ExpressionOperatorMappers.Default;
-
     var prop = Expression.Property(par, Field);
     var body = mapper.Operators[Operator](prop, ValueConstantExpression);
 
