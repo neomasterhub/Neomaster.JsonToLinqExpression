@@ -19,7 +19,7 @@ public class ExpressionRule
   {
     var srcFieldName = jsonElement.GetProperty(fieldPropertyName).GetString();
     var srcValue = jsonElement.GetProperty(valuePropertyName);
-    var field = mapper.Fields[fieldPropertyName];
+    var field = mapper.Fields[srcFieldName];
     var rule = new ExpressionRule
     {
       Operator = jsonElement.GetProperty(operatorPropertyName).GetString(),
