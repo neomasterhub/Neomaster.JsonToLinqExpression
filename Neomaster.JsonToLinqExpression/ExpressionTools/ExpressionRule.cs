@@ -62,10 +62,44 @@ public class ExpressionRule
       throw ex;
     }
 
+    if (!jsonElement.TryGetProperty(operatorPropertyName, out var operatorProperty))
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, operatorPropertyName);
+      var ex = new KeyNotFoundException(exMessage);
+      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = operatorPropertyName;
+
+      throw ex;
+    }
+
+    if (operatorProperty.ValueKind != JsonValueKind.String)
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotType, operatorPropertyName, JsonValueKind.String);
+      var ex = new InvalidOperationException(exMessage);
+      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = operatorPropertyName;
+      ex.Data[ErrorDataKeys.ExpectedType] = JsonValueKind.String;
+      ex.Data[ErrorDataKeys.CurrentType] = operatorProperty.ValueKind;
+
+      throw ex;
+    }
+
+    var op = operatorProperty.GetString();
+
+    if (string.IsNullOrWhiteSpace(op))
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyEmpty, operatorPropertyName);
+      var ex = new ArgumentException(exMessage);
+      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = operatorPropertyName;
+
+      throw ex;
+    }
+
     var field = mapper.Fields[srcFieldName];
     var rule = new ExpressionRule
     {
-      Operator = jsonElement.GetProperty(operatorPropertyName).GetString(),
+      Operator = op,
       Field = field.Name,
       Value = valueProperty,
       ValueConstantExpression = field.GetValue(valueProperty),
