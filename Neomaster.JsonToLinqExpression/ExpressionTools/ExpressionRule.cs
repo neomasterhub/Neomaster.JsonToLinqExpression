@@ -18,83 +18,9 @@ public class ExpressionRule
     string fieldPropertyName = nameof(Field),
     string valuePropertyName = nameof(Value))
   {
-    if (!jsonElement.TryGetProperty(fieldPropertyName, out var fieldProperty))
-    {
-      var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, fieldPropertyName);
-      var ex = new KeyNotFoundException(exMessage);
-      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.Property] = fieldPropertyName;
-
-      throw ex;
-    }
-
-    if (fieldProperty.ValueKind != JsonValueKind.String)
-    {
-      var exMessage = string.Format(ErrorMessages.JsonPropertyNotType, fieldPropertyName, JsonValueKind.String);
-      var ex = new InvalidOperationException(exMessage);
-      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.Property] = fieldPropertyName;
-      ex.Data[ErrorDataKeys.ExpectedType] = JsonValueKind.String;
-      ex.Data[ErrorDataKeys.CurrentType] = fieldProperty.ValueKind;
-
-      throw ex;
-    }
-
-    var srcFieldName = fieldProperty.GetString();
-
-    if (string.IsNullOrWhiteSpace(srcFieldName))
-    {
-      var exMessage = string.Format(ErrorMessages.JsonPropertyEmpty, fieldPropertyName);
-      var ex = new ArgumentException(exMessage);
-      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.Property] = fieldPropertyName;
-
-      throw ex;
-    }
-
-    if (!jsonElement.TryGetProperty(valuePropertyName, out var valueProperty))
-    {
-      var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, valuePropertyName);
-      var ex = new KeyNotFoundException(exMessage);
-      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.Property] = valuePropertyName;
-
-      throw ex;
-    }
-
-    if (!jsonElement.TryGetProperty(operatorPropertyName, out var operatorProperty))
-    {
-      var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, operatorPropertyName);
-      var ex = new KeyNotFoundException(exMessage);
-      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.Property] = operatorPropertyName;
-
-      throw ex;
-    }
-
-    if (operatorProperty.ValueKind != JsonValueKind.String)
-    {
-      var exMessage = string.Format(ErrorMessages.JsonPropertyNotType, operatorPropertyName, JsonValueKind.String);
-      var ex = new InvalidOperationException(exMessage);
-      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.Property] = operatorPropertyName;
-      ex.Data[ErrorDataKeys.ExpectedType] = JsonValueKind.String;
-      ex.Data[ErrorDataKeys.CurrentType] = operatorProperty.ValueKind;
-
-      throw ex;
-    }
-
-    var op = operatorProperty.GetString();
-
-    if (string.IsNullOrWhiteSpace(op))
-    {
-      var exMessage = string.Format(ErrorMessages.JsonPropertyEmpty, operatorPropertyName);
-      var ex = new ArgumentException(exMessage);
-      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.Property] = operatorPropertyName;
-
-      throw ex;
-    }
+    var op = GetPropertyRequiredStringValue(jsonElement, operatorPropertyName, JsonValueKind.String);
+    var srcFieldName = GetPropertyRequiredStringValue(jsonElement, fieldPropertyName, JsonValueKind.String);
+    var valueProperty = GetProperty(jsonElement, valuePropertyName);
 
     var field = mapper.Fields[srcFieldName];
     var rule = new ExpressionRule
@@ -118,5 +44,56 @@ public class ExpressionRule
     var body = mapper.Operators[Operator](prop, ValueConstantExpression);
 
     return body;
+  }
+
+  private static JsonElement GetProperty(
+    JsonElement obj,
+    string propertyName,
+    JsonValueKind? expectedPropertyType = null)
+  {
+    if (!obj.TryGetProperty(propertyName, out var property))
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, propertyName);
+      var ex = new KeyNotFoundException(exMessage);
+      ex.Data[ErrorDataKeys.Json] = obj.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = propertyName;
+
+      throw ex;
+    }
+
+    if (expectedPropertyType != null
+      && property.ValueKind != expectedPropertyType)
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotType, propertyName, expectedPropertyType);
+      var ex = new InvalidOperationException(exMessage);
+      ex.Data[ErrorDataKeys.Json] = obj.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = propertyName;
+      ex.Data[ErrorDataKeys.ExpectedType] = expectedPropertyType;
+      ex.Data[ErrorDataKeys.CurrentType] = property.ValueKind;
+
+      throw ex;
+    }
+
+    return property;
+  }
+
+  public static string GetPropertyRequiredStringValue(
+    JsonElement obj,
+    string propertyName,
+    JsonValueKind? expectedPropertyType = null)
+  {
+    var value = GetProperty(obj, propertyName, expectedPropertyType).GetString();
+
+    if (!string.IsNullOrWhiteSpace(value))
+    {
+      return value;
+    }
+
+    var exMessage = string.Format(ErrorMessages.JsonPropertyEmpty, propertyName);
+    var ex = new ArgumentException(exMessage);
+    ex.Data[ErrorDataKeys.Json] = obj.GetRawText();
+    ex.Data[ErrorDataKeys.Property] = propertyName;
+
+    throw ex;
   }
 }
