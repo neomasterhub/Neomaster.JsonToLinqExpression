@@ -105,4 +105,41 @@ public class ExpressionRuleUnitTests(ITestOutputHelper output)
     Assert.Equal(JsonValueKind.String, ex.Data[ErrorDataKeys.ExpectedType]);
     Assert.Equal(JsonValueKind.Number, ex.Data[ErrorDataKeys.CurrentType]);
   }
+
+  [Theory]
+  [InlineData("")]
+  [InlineData(" ")]
+  public void Parse_ShouldThrowArgumentException_InvalidFieldPropertyValue(string field)
+  {
+    // null - invalid json property type
+    var rule = new
+    {
+      op = "1",
+      field,
+      value = "3",
+    };
+    var fieldPropertyName = nameof(rule.field);
+    var ruleJson = JsonSerializer.Serialize(rule);
+    var ruleJsonElement = JsonSerializer.SerializeToElement(rule);
+    var expectedExMessage = string.Format(ErrorMessages.JsonPropertyEmpty, fieldPropertyName);
+    var mapper = new ExpressionFieldMapper()
+      .Add(
+        rule.field,
+        new ExpressionField
+        {
+          Name = rule.field,
+          GetValue = je => Expression.Constant(je.Value.GetString()),
+        });
+
+    var ex = Assert.Throws<ArgumentException>(() => ExpressionRule.Parse(
+      ruleJsonElement,
+      mapper,
+      nameof(rule.op),
+      fieldPropertyName,
+      nameof(rule.value)));
+
+    Assert.Equal(expectedExMessage, ex.Message);
+    Assert.Equal(fieldPropertyName, ex.Data[ErrorDataKeys.Property]);
+    Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.Json]);
+  }
 }
