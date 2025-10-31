@@ -52,14 +52,23 @@ public class ExpressionRule
       throw ex;
     }
 
-    var srcValue = jsonElement.GetProperty(valuePropertyName);
+    if (!jsonElement.TryGetProperty(valuePropertyName, out var valueProperty))
+    {
+      var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, valuePropertyName);
+      var ex = new KeyNotFoundException(exMessage);
+      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = valuePropertyName;
+
+      throw ex;
+    }
+
     var field = mapper.Fields[srcFieldName];
     var rule = new ExpressionRule
     {
       Operator = jsonElement.GetProperty(operatorPropertyName).GetString(),
       Field = field.Name,
-      Value = srcValue,
-      ValueConstantExpression = field.GetValue(srcValue),
+      Value = valueProperty,
+      ValueConstantExpression = field.GetValue(valueProperty),
     };
 
     return rule;
