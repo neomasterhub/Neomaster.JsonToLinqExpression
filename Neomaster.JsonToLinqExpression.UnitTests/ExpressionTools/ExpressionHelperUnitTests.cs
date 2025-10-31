@@ -160,8 +160,8 @@ public class ExpressionHelperUnitTests
       () => ExpressionHelper.EnumerateExpressionRules(treeJsonElement, key).ToArray());
 
     Assert.Equal(expectedExMessage, ex.Message);
-    Assert.Equal(key, ex.Data[ErrorDataKeys.JsonPropertyNotFound.Property]);
-    Assert.Equal(treeJson, ex.Data[ErrorDataKeys.JsonPropertyNotFound.Json]);
+    Assert.Equal(key, ex.Data[ErrorDataKeys.Property]);
+    Assert.Equal(treeJson, ex.Data[ErrorDataKeys.Json]);
   }
 
   [Fact]
@@ -177,10 +177,10 @@ public class ExpressionHelperUnitTests
       () => ExpressionHelper.EnumerateExpressionRules(treeJsonElement, key).ToArray());
 
     Assert.Equal(expectedExMessage, ex.Message);
-    Assert.Equal(key, ex.Data[ErrorDataKeys.JsonPropertyNotType.Property]);
-    Assert.Equal(treeJson, ex.Data[ErrorDataKeys.JsonPropertyNotType.Json]);
-    Assert.Equal(JsonValueKind.Array, ex.Data[ErrorDataKeys.JsonPropertyNotType.ExpectedType]);
-    Assert.Equal(JsonValueKind.String, ex.Data[ErrorDataKeys.JsonPropertyNotType.CurrentType]);
+    Assert.Equal(key, ex.Data[ErrorDataKeys.Property]);
+    Assert.Equal(treeJson, ex.Data[ErrorDataKeys.Json]);
+    Assert.Equal(JsonValueKind.Array, ex.Data[ErrorDataKeys.ExpectedType]);
+    Assert.Equal(JsonValueKind.String, ex.Data[ErrorDataKeys.CurrentType]);
   }
 
   private static void CreateExpressionBindTest<TResult>(

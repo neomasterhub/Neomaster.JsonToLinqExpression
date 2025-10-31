@@ -22,8 +22,8 @@ public class ExpressionRule
     {
       var exMessage = string.Format(ErrorMessages.JsonPropertyNotFound, fieldPropertyName);
       var ex = new KeyNotFoundException(exMessage);
-      ex.Data[ErrorDataKeys.JsonPropertyNotFound.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.JsonPropertyNotFound.Property] = fieldPropertyName;
+      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = fieldPropertyName;
 
       throw ex;
     }
@@ -32,10 +32,10 @@ public class ExpressionRule
     {
       var exMessage = string.Format(ErrorMessages.JsonPropertyNotType, fieldPropertyName, JsonValueKind.String);
       var ex = new InvalidOperationException(exMessage);
-      ex.Data[ErrorDataKeys.JsonPropertyNotType.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.JsonPropertyNotType.Property] = fieldPropertyName;
-      ex.Data[ErrorDataKeys.JsonPropertyNotType.ExpectedType] = JsonValueKind.String;
-      ex.Data[ErrorDataKeys.JsonPropertyNotType.CurrentType] = fieldProperty.ValueKind;
+      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = fieldPropertyName;
+      ex.Data[ErrorDataKeys.ExpectedType] = JsonValueKind.String;
+      ex.Data[ErrorDataKeys.CurrentType] = fieldProperty.ValueKind;
 
       throw ex;
     }
@@ -46,8 +46,8 @@ public class ExpressionRule
     {
       var exMessage = string.Format(ErrorMessages.JsonPropertyEmpty, fieldPropertyName);
       var ex = new ArgumentException(exMessage);
-      ex.Data[ErrorDataKeys.JsonPropertyEmpty.Json] = jsonElement.GetRawText();
-      ex.Data[ErrorDataKeys.JsonPropertyEmpty.Property] = fieldPropertyName;
+      ex.Data[ErrorDataKeys.Json] = jsonElement.GetRawText();
+      ex.Data[ErrorDataKeys.Property] = fieldPropertyName;
 
       throw ex;
     }

@@ -45,24 +45,9 @@ public static class Consts
 
   public static class ErrorDataKeys
   {
-    public static class JsonPropertyNotFound
-    {
-      public const string Json = nameof(Json);
-      public const string Property = nameof(Property);
-    }
-
-    public static class JsonPropertyNotType
-    {
-      public const string Json = nameof(Json);
-      public const string Property = nameof(Property);
-      public const string ExpectedType = nameof(ExpectedType);
-      public const string CurrentType = nameof(CurrentType);
-    }
-
-    public static class JsonPropertyEmpty
-    {
-      public const string Json = nameof(Json);
-      public const string Property = nameof(Property);
-    }
+    public const string Json = nameof(Json);
+    public const string Property = nameof(Property);
+    public const string ExpectedType = nameof(ExpectedType);
+    public const string CurrentType = nameof(CurrentType);
   }
 }

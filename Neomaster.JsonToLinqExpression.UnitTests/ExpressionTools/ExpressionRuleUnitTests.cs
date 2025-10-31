@@ -74,8 +74,8 @@ public class ExpressionRuleUnitTests(ITestOutputHelper output)
       nameof(rule.value)));
 
     Assert.Equal(expectedExMessage, ex.Message);
-    Assert.Equal(invalidKey, ex.Data[ErrorDataKeys.JsonPropertyNotFound.Property]);
-    Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.JsonPropertyNotFound.Json]);
+    Assert.Equal(invalidKey, ex.Data[ErrorDataKeys.Property]);
+    Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.Json]);
   }
 
   [Fact]
@@ -100,9 +100,9 @@ public class ExpressionRuleUnitTests(ITestOutputHelper output)
       nameof(rule.value)));
 
     Assert.Equal(expectedExMessage, ex.Message);
-    Assert.Equal(fieldPropertyName, ex.Data[ErrorDataKeys.JsonPropertyNotType.Property]);
-    Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.JsonPropertyNotType.Json]);
-    Assert.Equal(JsonValueKind.String, ex.Data[ErrorDataKeys.JsonPropertyNotType.ExpectedType]);
-    Assert.Equal(JsonValueKind.Number, ex.Data[ErrorDataKeys.JsonPropertyNotType.CurrentType]);
+    Assert.Equal(fieldPropertyName, ex.Data[ErrorDataKeys.Property]);
+    Assert.Equal(ruleJson, ex.Data[ErrorDataKeys.Json]);
+    Assert.Equal(JsonValueKind.String, ex.Data[ErrorDataKeys.ExpectedType]);
+    Assert.Equal(JsonValueKind.Number, ex.Data[ErrorDataKeys.CurrentType]);
   }
 }
