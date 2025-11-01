@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\nuget-publish.yml = .github\workflows\nuget-publish.yml
+		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neomaster.JsonToLinq", "Neomaster.JsonToLinq\Neomaster.JsonToLinq.csproj", "{18772982-D0CA-9722-4B44-DF21E40AD685}"
