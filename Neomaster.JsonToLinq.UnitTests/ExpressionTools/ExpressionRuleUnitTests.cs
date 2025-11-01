@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
 using System.Text.Json;
 using Xunit.Abstractions;
-using static Neomaster.JsonToLinqExpression.Consts;
+using static Neomaster.JsonToLinq.Consts;
 
-namespace Neomaster.JsonToLinqExpression.UnitTests;
+namespace Neomaster.JsonToLinq.UnitTests;
 
 public class ExpressionRuleUnitTests(ITestOutputHelper output)
 {

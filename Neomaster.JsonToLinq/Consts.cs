@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Neomaster.JsonToLinqExpression;
+namespace Neomaster.JsonToLinq;
 
 public static class Consts
 {

@@ -1,4 +1,4 @@
-namespace Neomaster.JsonToLinqExpression.UnitTests;
+namespace Neomaster.JsonToLinq.UnitTests;
 
 internal class User
 {

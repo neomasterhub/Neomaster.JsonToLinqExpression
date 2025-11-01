@@ -7,19 +7,19 @@
     <Nullable>disable</Nullable>
     <NoWarn>$(NoWarn);SYSLIB1045</NoWarn>
     <NoWarn>$(NoWarn);IDE0079</NoWarn>
-    <PackageId>Neomaster.JsonToLinqExpression</PackageId>
-    <PackageIcon>neomaster64.png</PackageIcon>
-    <Version>1.0.0-alpha4</Version>
+    <PackageId>JsonToLinq</PackageId>
+    <PackageIcon>logo.png</PackageIcon>
+    <Version>1.0.0-rc1</Version>
     <Authors>Neomaster</Authors>
     <Company>Neomaster</Company>
     <Copyright>Copyright © 2025 Neomaster</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <RepositoryUrl>https://github.com/neomasterhub/Neomaster.JsonToLinqExpression</RepositoryUrl>
+    <RepositoryUrl>https://github.com/neomasterhub/Neomaster.JsonToLinq</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../neomaster64.png" Pack="true" PackagePath="" />
+    <None Include="../Docs/img/logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
