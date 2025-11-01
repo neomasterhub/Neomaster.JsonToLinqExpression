@@ -19,13 +19,13 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore Neomaster.JsonToLinqExpression/Neomaster.JsonToLinqExpression.csproj
+        run: dotnet restore Neomaster.JsonToLinq/Neomaster.JsonToLinq.csproj
 
       - name: Build project
-        run: dotnet build Neomaster.JsonToLinqExpression/Neomaster.JsonToLinqExpression.csproj --configuration Release --no-restore
+        run: dotnet build Neomaster.JsonToLinq/Neomaster.JsonToLinq.csproj --configuration Release --no-restore
 
       - name: Pack NuGet package
-        run: dotnet pack Neomaster.JsonToLinqExpression/Neomaster.JsonToLinqExpression.csproj --configuration Release --no-build --output ./nupkg
+        run: dotnet pack Neomaster.JsonToLinq/Neomaster.JsonToLinq.csproj --configuration Release --no-build --output ./nupkg
 
       - name: Publish package to NuGet.org
         run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
