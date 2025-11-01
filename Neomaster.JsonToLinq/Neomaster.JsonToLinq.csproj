@@ -16,6 +16,16 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/neomasterhub/Neomaster.JsonToLinq</RepositoryUrl>
+    <PackageTags>
+      json-to-linq;
+      json;linq;
+      expression;expression-builder;expression-parser;expression-tree;expression-tree-builder;
+      lambda-expression;predicate;filter;
+      query;query-builder;
+      ef-core;entity-framework;
+      csharp;dotnet;
+      neomaster
+    </PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
