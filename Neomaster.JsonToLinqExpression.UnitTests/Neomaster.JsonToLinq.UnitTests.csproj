@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Neomaster.JsonToLinqExpression\Neomaster.JsonToLinqExpression.csproj" />
+    <ProjectReference Include="..\Neomaster.JsonToLinqExpression\Neomaster.JsonToLinq.csproj" />
   </ItemGroup>
 
   <ItemGroup>
