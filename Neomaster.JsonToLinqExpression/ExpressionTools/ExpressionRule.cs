@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 using System.Text.Json;
-using static Neomaster.JsonToLinqExpression.Consts;
+using static Neomaster.JsonToLinq.Consts;
 
-namespace Neomaster.JsonToLinqExpression;
+namespace Neomaster.JsonToLinq;
 
 public class ExpressionRule
 {

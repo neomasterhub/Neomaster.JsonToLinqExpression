@@ -1,4 +1,4 @@
-namespace Neomaster.JsonToLinqExpression;
+namespace Neomaster.JsonToLinq;
 
 public class ExpressionFieldMapper
 {

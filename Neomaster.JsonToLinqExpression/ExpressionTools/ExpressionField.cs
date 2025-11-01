@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using System.Text.Json;
 
-namespace Neomaster.JsonToLinqExpression;
+namespace Neomaster.JsonToLinq;
 
 public class ExpressionField
 {
