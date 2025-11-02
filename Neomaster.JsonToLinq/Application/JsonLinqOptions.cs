@@ -1,0 +1,18 @@
+using System.Linq.Expressions;
+using static Neomaster.JsonToLinq.Consts;
+
+namespace Neomaster.JsonToLinq;
+
+/// <summary>
+/// Provides configuration options for JSON-to-LINQ expression parsing.
+/// </summary>
+public record JsonLinqOptions
+{
+  public string LogicOperatorPropertyName { get; set; } = "Logic";
+  public string RulesPropertyName { get; set; } = "Rules";
+  public string OperatorPropertyName { get; set; } = nameof(ExpressionRule.Operator);
+  public string FieldPropertyName { get; set; } = nameof(ExpressionRule.Field);
+  public string ValuePropertyName { get; set; } = nameof(ExpressionRule.Value);
+  public ExpressionOperatorMapper OperatorMapper { get; set; } = ExpressionOperatorMappers.Default;
+  public Func<ExpressionBind, Expression, Expression, Expression> BindBuilder { get; set; } = ExpressionBindBuilders.Sql;
+}
