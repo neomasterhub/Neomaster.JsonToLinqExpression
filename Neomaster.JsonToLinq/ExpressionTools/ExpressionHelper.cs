@@ -6,7 +6,7 @@ namespace Neomaster.JsonToLinq;
 
 public static class ExpressionHelper
 {
-  public static Expression<Func<T, bool>> ParseFilterExpression<T>(
+  public static Expression<Func<T, bool>> ParseToFilterExpression<T>(
     JsonDocument doc,
     ExpressionFieldMapper fieldMapper,
     ExpressionOperatorMapper operatorMapper,
