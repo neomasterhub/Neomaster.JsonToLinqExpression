@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neomaster.JsonToLinq", "Neo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neomaster.JsonToLinq.UnitTests", "Neomaster.JsonToLinq.UnitTests\Neomaster.JsonToLinq.UnitTests.csproj", "{686EDCAB-68E4-657A-1774-6B8C9E79EFE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neomaster.JsonToLinq.Demo", "Neomaster.JsonToLinq.Demo\Neomaster.JsonToLinq.Demo.csproj", "{1ABA76FA-988D-40FE-86D3-6A2482FC60DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{686EDCAB-68E4-657A-1774-6B8C9E79EFE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{686EDCAB-68E4-657A-1774-6B8C9E79EFE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{686EDCAB-68E4-657A-1774-6B8C9E79EFE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ABA76FA-988D-40FE-86D3-6A2482FC60DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ABA76FA-988D-40FE-86D3-6A2482FC60DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ABA76FA-988D-40FE-86D3-6A2482FC60DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ABA76FA-988D-40FE-86D3-6A2482FC60DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
