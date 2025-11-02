@@ -2,9 +2,14 @@
   <img src="Docs/img/title.svg">
 </div>
 
+<br>
+
 <div align="center">
 
-  [![NuGet Version](https://img.shields.io/nuget/v/JsonToLinq.svg?label=NuGet&logo=nuget&logoColor=white&labelColor=gray&color=blue)](https://www.nuget.org/packages/JsonToLinq)
+  [![License](https://img.shields.io/badge/🧾License-MIT-green?style=flat)](https://opensource.org/licenses/MIT)
+  [![Telegram Channel](https://img.shields.io/badge/Telegram-Neomaster-2CA5E0?style=flat&logo=telegram)](https://t.me/neomaster_dev)
+  [![.NET Vesion](https://img.shields.io/badge/.NET_Standard-2.1-blueviolet?style=flat&logo=dotnet)](#)  
+  [![NuGet](https://img.shields.io/nuget/v/JsonToLinq.svg?label=NuGet&logo=nuget&logoColor=white&labelColor=gray&color=blue)](https://www.nuget.org/packages/JsonToLinq)
 
 </div>
 
@@ -20,18 +25,18 @@
 - **Audit & logging filters:** Dynamically select subsets of data based on JSON rules for auditing or logging purposes.
 
 ## 📌 Default Operator Mapping
-| JSON| LINQ Expression                 | Description           |
-|-----|---------------------------------|-----------------------|
-| `&` | `Expression.And`                | Bitwise AND           |
-| `&&`| `Expression.AndAlso`            | Logical AND           |
-| `\|` | `Expression.Or`                 | Bitwise OR            |
-| `\|\|`| `Expression.OrElse`             | Logical OR            |
-| `=` | `Expression.Equal`              | Equal                 |
-| `!=`| `Expression.NotEqual`           | Not equal             |
-| `>` | `Expression.GreaterThan`        | Greater than          |
-| `>=`| `Expression.GreaterThanOrEqual` | Greater than or equal |
-| `<` | `Expression.LessThan`           | Less than             |
-| `<=`| `Expression.LessThanOrEqual`    | Less than or equal    |
+| JSON   | LINQ Expression                 | Description           |
+|-----   |---------------------------------|-----------------------|
+| `&`    | `Expression.And`                | Bitwise AND           |
+| `&&`   | `Expression.AndAlso`            | Logical AND           |
+| `\|`   | `Expression.Or`                 | Bitwise OR            |
+| `\|\|` | `Expression.OrElse`             | Logical OR            |
+| `=`    | `Expression.Equal`              | Equal                 |
+| `!=`   | `Expression.NotEqual`           | Not equal             |
+| `>`    | `Expression.GreaterThan`        | Greater than          |
+| `>=`   | `Expression.GreaterThanOrEqual` | Greater than or equal |
+| `<`    | `Expression.LessThan`           | Less than             |
+| `<=`   | `Expression.LessThanOrEqual`    | Less than or equal    |
 
 ## 🧪Demos
 ### Filtering Users
