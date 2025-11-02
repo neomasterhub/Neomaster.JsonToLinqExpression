@@ -19,6 +19,20 @@
 - **EF Core / Entity Framework queries:** Map JSON filters directly to LINQ queries executed on the database.
 - **Audit & logging filters:** Dynamically select subsets of data based on JSON rules for auditing or logging purposes.
 
+## 📌 Default Operator Mapping
+| JSON| LINQ Expression                 | Description           |
+|-----|---------------------------------|-----------------------|
+| `&` | `Expression.And`                | Bitwise AND           |
+| `&&`| `Expression.AndAlso`            | Logical AND           |
+| `\|` | `Expression.Or`                 | Bitwise OR            |
+| `\|\|`| `Expression.OrElse`             | Logical OR            |
+| `=` | `Expression.Equal`              | Equal                 |
+| `!=`| `Expression.NotEqual`           | Not equal             |
+| `>` | `Expression.GreaterThan`        | Greater than          |
+| `>=`| `Expression.GreaterThanOrEqual` | Greater than or equal |
+| `<` | `Expression.LessThan`           | Less than             |
+| `<=`| `Expression.LessThanOrEqual`    | Less than or equal    |
+
 ## 🧪Demos
 ### Filtering Users
 ```csharp
