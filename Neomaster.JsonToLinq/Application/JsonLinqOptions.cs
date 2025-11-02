@@ -8,11 +8,11 @@ namespace Neomaster.JsonToLinq;
 /// </summary>
 public record JsonLinqOptions
 {
-  public string LogicOperatorPropertyName { get; set; } = "Logic";
-  public string RulesPropertyName { get; set; } = "Rules";
-  public string OperatorPropertyName { get; set; } = nameof(ExpressionRule.Operator);
-  public string FieldPropertyName { get; set; } = nameof(ExpressionRule.Field);
-  public string ValuePropertyName { get; set; } = nameof(ExpressionRule.Value);
+  public string LogicOperatorPropertyName { get; set; } = JsonLinqOptionsPropertyNames.LogicOperator;
+  public string RulesPropertyName { get; set; } = JsonLinqOptionsPropertyNames.Rules;
+  public string OperatorPropertyName { get; set; } = JsonLinqOptionsPropertyNames.Operator;
+  public string FieldPropertyName { get; set; } = JsonLinqOptionsPropertyNames.Field;
+  public string ValuePropertyName { get; set; } = JsonLinqOptionsPropertyNames.Value;
   public ExpressionOperatorMapper OperatorMapper { get; set; } = ExpressionOperatorMappers.Default;
   public Func<ExpressionBind, Expression, Expression, Expression> BindBuilder { get; set; } = ExpressionBindBuilders.Sql;
 }
