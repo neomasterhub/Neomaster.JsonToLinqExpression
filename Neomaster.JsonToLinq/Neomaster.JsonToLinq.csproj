@@ -9,7 +9,7 @@
     <NoWarn>$(NoWarn);IDE0079</NoWarn>
     <PackageId>JsonToLinq</PackageId>
     <PackageIcon>logo.png</PackageIcon>
-    <Version>1.0.0-rc3</Version>
+    <Version>1.0.0-rc4</Version>
     <Authors>Neomaster</Authors>
     <Company>Neomaster</Company>
     <Copyright>Copyright © 2025 Neomaster</Copyright>
