@@ -6,7 +6,7 @@ namespace Neomaster.JsonToLinq.UnitTests;
 public class ExpressionFieldUnitTests
 {
   [Fact]
-  public void GetValue()
+  public void GetValue_SpecificTypeMethod()
   {
     GetValueTest(typeof(int), je => je?.GetInt32(), 1);
     GetValueTest(typeof(int?), je => je?.GetInt32(), null);
@@ -19,6 +19,28 @@ public class ExpressionFieldUnitTests
     GetValueTest(typeof(DateTime), je => je?.Deserialize<DateTime>(), DateTime.Now);
     GetValueTest(typeof(DateTime?), je => je?.Deserialize<DateTime>(), (DateTime?)null);
     GetValueTest(typeof(DateTime?), je => je?.Deserialize<DateTime>(), (DateTime?)DateTime.Now);
+  }
+
+  [Fact]
+  public void GetValue_Deserialize()
+  {
+    void Test<T>(T value)
+    {
+      var type = typeof(T);
+      GetValueTest(type, je => je?.Deserialize(type), value);
+    }
+
+    Test(1);
+    Test((int?)null);
+    Test((int?)1);
+    Test((string)null);
+    Test("1");
+    Test(ConsoleColor.Red);
+    Test((ConsoleColor?)null);
+    Test((ConsoleColor?)ConsoleColor.Red);
+    Test(DateTime.Now);
+    Test((DateTime?)null);
+    Test((DateTime?)DateTime.Now);
   }
 
   private static void GetValueTest(
