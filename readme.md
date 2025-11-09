@@ -41,7 +41,6 @@
 ## 🧪 Demos
 ### Filtering Users
 ```csharp
-using System.Linq.Expressions;
 using System.Text.Json;
 using Neomaster.JsonToLinq;
 using Neomaster.JsonToLinq.UnitTests;
@@ -72,12 +71,12 @@ var filterJson = JsonDocument.Parse(
         "Logic": "||",
         "Rules": [
           {
-            "Field": "last-visit-at",
+            "Field": "lastVisitAt",
             "Operator": "=",
             "Value": null
           },
           {
-            "Field": "last-visit-at",
+            "Field": "lastVisitAt",
             "Operator": "<=",
             "Value": "2025-01-01T00:00:00Z"
           }
@@ -87,31 +86,14 @@ var filterJson = JsonDocument.Parse(
   }
   """);
 
-// 3. Map JSON field names to expression field definitions.
-var fieldMapper = new ExpressionFieldMapper()
-  .Add(
-    "balance",
-    new ExpressionField()
-    {
-      Name = nameof(User.Balance),
-      GetValue = jsonElement => Expression.Constant(jsonElement.Value.GetDecimal()),
-    })
-  .Add(
-    "last-visit-at",
-    new ExpressionField()
-    {
-      Name = nameof(User.LastVisitAt),
-      GetValue = jsonElement => Expression.Constant(jsonElement?.Deserialize<DateTime?>(), typeof(DateTime?)),
-    });
-
-// 4. Parse JSON to LINQ expression and compile.
-var filterExpr = JsonLinq.ParseToFilterExpression<User>(filterJson, fieldMapper);
+// 3. Parse JSON to LINQ expression and compile.
+var filterExpr = JsonLinq.ParseToFilterExpression<User>(filterJson);
 var filterLambda = filterExpr.Compile();
 
-// 5. Apply filter.
+// 4. Apply filter.
 var filteredUsers = users.Where(filterLambda);
 
-// 6. Output results.
+// 5. Output results.
 foreach (var fu in filteredUsers)
 {
   Console.WriteLine($"Id: {fu.Id}");

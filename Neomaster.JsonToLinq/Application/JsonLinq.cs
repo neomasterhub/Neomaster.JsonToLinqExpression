@@ -20,10 +20,13 @@ public static class JsonLinq
   /// <returns>An <see cref="Expression{Func}"/> representing the filter for <typeparamref name="T"/>.</returns>
   public static Expression<Func<T, bool>> ParseToFilterExpression<T>(
     JsonDocument doc,
-    ExpressionFieldMapper fieldMapper,
+    ExpressionFieldMapper fieldMapper = null,
     JsonLinqOptions options = null)
   {
     options ??= _defaultOptions;
+
+    fieldMapper ??= ExpressionFieldMapperFactory
+      .CreateForPublicProperties<T>(options.ConvertPropertyNameForJson);
 
     return ExpressionHelper.ParseToFilterExpression<T>(
       doc,
