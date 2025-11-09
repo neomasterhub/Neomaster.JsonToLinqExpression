@@ -6,8 +6,10 @@ namespace Neomaster.JsonToLinq;
 
 public class ExpressionFieldMapperFactory
 {
-  public static ExpressionFieldMapper CreateForPublicProperties<T>()
+  public static ExpressionFieldMapper CreateForPublicProperties<T>(
+    Func<string, string> convertPropertyNameForJson = null)
   {
+    convertPropertyNameForJson ??= _ => _;
     var mapper = new ExpressionFieldMapper();
     var type = typeof(T);
     var props = type
