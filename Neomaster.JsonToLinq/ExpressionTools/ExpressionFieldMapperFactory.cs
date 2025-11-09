@@ -18,7 +18,7 @@ public class ExpressionFieldMapperFactory
 
     foreach (var prop in props)
     {
-      mapper.Add(prop.Name, new ExpressionField
+      mapper.Add(convertPropertyNameForJson(prop.Name), new ExpressionField
       {
         Name = prop.Name,
         GetValue = je => Expression.Constant(

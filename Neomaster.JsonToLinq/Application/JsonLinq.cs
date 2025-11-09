@@ -23,8 +23,10 @@ public static class JsonLinq
     ExpressionFieldMapper fieldMapper = null,
     JsonLinqOptions options = null)
   {
-    fieldMapper ??= ExpressionFieldMapperFactory.CreateForPublicProperties<T>();
     options ??= _defaultOptions;
+
+    fieldMapper ??= ExpressionFieldMapperFactory
+      .CreateForPublicProperties<T>(options.ConvertPropertyNameForJson);
 
     return ExpressionHelper.ParseToFilterExpression<T>(
       doc,
