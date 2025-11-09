@@ -1,6 +1,8 @@
+using Xunit.Abstractions;
+
 namespace Neomaster.JsonToLinq.UnitTests;
 
-public class ExpressionFieldMapperFactoryUnitTests
+public class ExpressionFieldMapperFactoryUnitTests(ITestOutputHelper output)
 {
   private static readonly Type _propertiesPublicGetSet = typeof(PropertiesPublicGetSet);
 
@@ -20,6 +22,7 @@ public class ExpressionFieldMapperFactoryUnitTests
       var expectedName = props[i].Name;
       Assert.Equal(expectedName, f.Key);
       Assert.Equal(expectedName, f.Value.Name);
+      output.WriteLine(f.Key);
     });
   }
 }
