@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Text.Json;
 using static Neomaster.JsonToLinq.Consts;
 
 namespace Neomaster.JsonToLinq;
@@ -49,4 +50,11 @@ public record JsonLinqOptions
   /// The default value is <see cref="ExpressionBindBuilders.Sql"/>.
   /// </summary>
   public Func<ExpressionBind, Expression, Expression, Expression> BindBuilder { get; set; } = ExpressionBindBuilders.Sql;
+
+  /// <summary>
+  /// Gets or sets a function that converts C# property names to their corresponding values in JSON.<br/>
+  /// Example: "Id" of User.Id → "id" in "Rule": { "Field": "id", "Operator": "=", ...<br/>
+  /// The default value is <see cref="JsonCamelCaseNamingPolicy.ConvertName(string)"/>.
+  /// </summary>
+  public Func<string, string> ConvertPropertyNameForJson { get; set; } = JsonNamingPolicy.CamelCase.ConvertName;
 }
